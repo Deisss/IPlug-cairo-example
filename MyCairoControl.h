@@ -15,23 +15,35 @@
 #endif
 
 class MyCairoControl : public IControl {
+protected:
+	cairo_surface_t *surface;
+	cairo_t *cr;
+
 public:
-	MyCairoControl(IPlugBase *pPlug, IRECT pR, int paramIdx) : IControl(pPlug, pR, paramIdx) {};
-	~MyCairoControl() {};
+	MyCairoControl(IPlugBase *pPlug, IRECT pR, int paramIdx) : IControl(pPlug, pR, paramIdx) {
+		surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, this->mRECT.W(), this->mRECT.H());
+		cr = cairo_create(surface);
+	};
+	~MyCairoControl() {
+		cairo_destroy(cr);
+		cairo_surface_destroy(surface);
+	};
 
 	bool IsDirty() { return true; };
 
 	bool Draw(IGraphics* pGraphics) {
-		cairo_surface_t *surface;
-		cairo_t *cr;
+		// We clear the surface
+		cairo_save(cr);
+		cairo_set_source_rgba(cr, 0, 0, 0, 0);
+		cairo_set_operator(cr, CAIRO_OPERATOR_SOURCE);
+		cairo_paint(cr);
+		cairo_restore(cr);
+
 
 		// This parameter (unused for now) will be used soon for the button
 		double position = (this->GetParam()->GetMax() - this->GetParam()->Value()) * this->mRECT.H() / 100.;
 
-		surface = cairo_image_surface_create(CAIRO_FORMAT_ARGB32, this->mRECT.W(), this->mRECT.H());
-		cr = cairo_create(surface);
-
-		// We define the main color to use, a red color
+		// We define the main color to use, a transparent red color
 		cairo_set_source_rgba(cr, 0.8, 0., 0., 0.75);
 
 		// We draw two bezier lines with one point at top
@@ -73,13 +85,7 @@ public:
 
 		// And we render
 		IBitmap result(&WrapperBitmap, WrapperBitmap.getWidth(), WrapperBitmap.getHeight());
-		pGraphics->DrawBitmap(&result, &this->mRECT);
-
-		// And release memory
-		cairo_destroy(cr);
-		cairo_surface_destroy(surface);
-
-		return true;
+		return pGraphics->DrawBitmap(&result, &this->mRECT);
 	};
 };
 
