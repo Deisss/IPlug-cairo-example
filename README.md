@@ -18,6 +18,8 @@ The build tested where:
   * Release - x86
   * Release - x64
 
+For the *-app project only (as it's a test, but it also works on VST, I tested it with another project).
+
 With success on VS 2013.
 
 
