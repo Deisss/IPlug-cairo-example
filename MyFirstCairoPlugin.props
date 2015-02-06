@@ -11,7 +11,7 @@
     <DEBUG_DEFS>_DEBUG;</DEBUG_DEFS>
     <RELEASE_DEFS>NDEBUG;</RELEASE_DEFS>
     <TRACER_DEFS>TRACER_BUILD;NDEBUG;</TRACER_DEFS>
-    <ADDITIONAL_INCLUDES>$(ProjectDir)\..\..\..\MyDSP\;</ADDITIONAL_INCLUDES>
+    <ADDITIONAL_INCLUDES>.\include</ADDITIONAL_INCLUDES>
     <APP_INCLUDES>..\..\ASIO_SDK;..\..\WDL\rtaudiomidi;</APP_INCLUDES>
     <APP_LIBS>dsound.lib;winmm.lib;</APP_LIBS>
     <VST3_INCLUDES>..\..\VST3_SDK;</VST3_INCLUDES>
@@ -31,7 +31,8 @@
       <AdditionalIncludeDirectories>$(ADDITIONAL_INCLUDES);..\..\WDL;..\..\WDL\lice;..\..\WDL\IPlug</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>IPlug.lib;lice.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>IPlug.lib;lice.lib;cairo-static.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalLibraryDirectories>.\lib\$(Platform)\$(Configuration)\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
